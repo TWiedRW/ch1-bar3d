@@ -1,0 +1,6 @@
+[submodule "3d_graphical_perception"]
+	path = 3d_graphical_perception
+	url = https://github.com/TWiedRW/3d_graphical_perception
+[submodule "2023-JDS-3dcharts"]
+	path = 2023-JDS-3dcharts
+	url = https://github.com/TWiedRW/2023-JDS-3dcharts
