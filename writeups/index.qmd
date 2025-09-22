@@ -65,13 +65,13 @@ res <- res_all %>%
 
 ```
 
-# Introduction
+## Introduction
 
 Good communication requires both that the information be transmitted correctly and that the intended recipient be able to decode and understand the transmitted information accurately. In order to communicate effectively, we must use graphical forms that accurately convey information relevant to the task in question. In many cases, this means we must understand how accurately people can read quantitative information off of charts. While accuracy is not the only quantity of interest in graphical investigations [@hullmanPursuitErrorSurvey2019], it is an important factor in assessing the utility of many different data graphics.
 
 The accuracy of graphical forms has been studied for almost a century [@vonhuhnFurtherStudiesGraphic1927;@eellsRelativeMeritsCircles1926;@croxtonGraphicComparisonsBars1932;@croxtonBarChartsCircle1927]; as new ways of representing information evolve, we must revisit old studies to determine whether these representations have the same limitations as previous versions. This is particularly true in areas like graphics which are affected by the immense technological innovation in hardware and software which has taken place since the early 1990s.
 
-## Elementary Graphical Tasks
+### Elementary Graphical Tasks
 
 @clevelandGraphical1984 established the comparative accuracy of different "elementary perceptual tasks" (EPTs).
 Elementary Perceptual Tasks, according to these experiments, include assessing graphical elements such as position along a common scale, length, angle, and volume, and estimating the corresponding numerical value of these representations.
@@ -114,7 +114,7 @@ datasets$data[[1]] %>%
 
 
 
-## 3D Graphical Perception
+### 3D Graphical Perception
 
 Chart perception is affected by the human visual system's implicit assumption that visual stimuli are three-dimensional; after all, most of the visual input we process does come from a three-dimensional world, but charts are artificial. 
 In addition, these artificial stimuli are typically created and presented in two dimensions.
@@ -422,13 +422,13 @@ In this paper, we discuss a study designed to examine Cleveland & McGill's exper
 In the next section we provide details about design and execution of our experiment, including the process of replicating stimuli from @clevelandGraphical1984 in order to create 2D, 3D projected, 3D rendered, and 3D printed bar graphs. The next section presents the results, and we conclude the paper by discussing this experiment in the context of existing work on the perception of 2D and 3D graphical elements. 
 
 
-# Methods
+## Methods
 
 
 Our study is designed to replicate and expand upon the position-length experiment from Cleveland & McGill as closely as possible, with the hope of being able to integrate this study with previously reported results in a consistent manner. 
 In this section, we discuss the replication process and the design of our version of this experiment.
 
-## Replicating Cleveland and McGill
+### Replicating Cleveland and McGill
 
 The first step of replicating the position-length experiment was to determine the heights of the bars that  participants use for comparisons.
 These values for the bar heights are linear on a log scale and are given by
@@ -474,7 +474,7 @@ In each graph, there are two sets of five bars each, and two of the bars are mar
 Cleveland and McGill did not specify the random process for the heights of the eight other bars, so we used a scaled Beta distribution to provide random structure around our fixed values.
 Code to reproduce the data generation process, data underlying the plots used in this study, the rendered plots and STL files, anonymized user data, and analysis code can found be at [https://github.com/TWiedRW/2023-JDS-3dcharts](https://github.com/TWiedRW/2023-JDS-3dcharts). 
 
-## Stimuli Construction
+### Stimuli Construction
 
 The graphs share a common layout across all formats, where two groupings of five bars are identified by "A" and "B", respectively, and circles and triangles are used to identify the bars participants should compare. Example graphs are shown in @fig-plotTypes.
 There are some graphical elements that cannot be easily portrayed via 3D printing. For this reason, all graph types do not have axes, grid lines, or floating titles.
@@ -507,7 +507,7 @@ The lights were positioned so that one was behind the rendered figure<!--(x: 910
 This arrangement provided a consistent visual experience and minimized shadows that prevented visual estimation of the bars.
 
 
-## Experiment Design
+### Experiment Design
 
 A diagram of the experimental design is provided in @fig-studyDesign. The study is set up as a modified randomized incomplete block design, comprised of 3 blocks (presentation mode) and 7 bar ratios (5 are selected for each participant). At each combination of ratio and presentation type, the comparison type, adjacent (Type 1) or separated (Type 3), is randomly selected. This process was used to create 21 kits of 5 3D printed charts and 10 virtual charts. There is thus a slight deviation from a completely randomized incomplete block design, in that all possible combinations of ratios, presentation modes, and comparison types are not present in our design. However, this approach provided the best experimental design given the constraints of managing physical stimuli; it took nearly a month of continuous 3D printing to create all of the charts for the kits that we assembled. A dataset containing the kit composition breakdown is available in the github repository for this project.
 
@@ -519,7 +519,7 @@ knitr::include_graphics("_images/design.pdf")
 ```
 
 
-## Participant Recruitment
+### Participant Recruitment
 
 One interesting facet of @clevelandGraphical1984 is the participant recruitment methodology: "For each experiment the subjects fell into two categories: (1) a group of females, mostly housewives, without substantial technical experience; (2) a mixture of males and females with substantial technical training and working in technical jobs. 
 Most of the subjects in the position-length experiment participated in the position-angle experiment; in all cases repeat subjects judged the position-angle graphs first." 
@@ -584,7 +584,7 @@ p
 While the results of any sample with recruitment methodology like this are not generalizable to the public, running our initial study on a comparable population to that of the initial study serves a purpose: other replications, such as @heerCrowdsourcingGraphicalPerception2010b, used online samples of paid participants, who likely have less experience using charts and graphics and making numerical estimations than those in a statistics department (and individuals who cohabitate with them). We have every intention of running this experiment in other populations, but the convenience of online sampling is not compatible with physical objects such as our 3D printed charts, so we will have to recruit in-person participants. Thus, an initial study in a population comparable to @clevelandGraphical1984 is a reasonable first step into testing 3D charts.  
 
 
-## Data Collection
+### Data Collection
 
 A Shiny applet was used for data collection, along with the provided kit of 3D printed charts.
 Participants provided informed consent through the applet, and then were asked for demographic information (age, gender, education level). 
@@ -614,7 +614,7 @@ res %>%
 ```
 
 
-# Results
+## Results
 
 ```{r, include = F}
 res_sub_count <- res_all %>% 
@@ -629,7 +629,7 @@ All responses that incorrectly identified the smaller bar ($n = `r nrow(res_all)
 In addition, one response was removed because the participant did not enter a valid ID for a 3D printed chart.
 
 
-## Midmeans of Log Absolute Errors
+### Midmeans of Log Absolute Errors
 @clevelandGraphical1984 used 
 $$\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)$$
 to measure accuracy of their participant's responses. 
@@ -683,7 +683,7 @@ One interesting facet of this data is that there is a consistent reduction in lo
 This may be because of implicit anchoring - we can typically bisect a span relatively accurately, which means that it might be expected that when the true proportion is near 50%, we would both notice that and be able to accurately transfer that information to the slider. 
 This pattern is more noticable in separated (Type 3) comparisons, which also makes sense - as these comparisons are known to be less accurate, a locally  minimal error near 50% with increased error relative to adjacent (Type 1) comparisons could easily explain the exaggerated trends we see in @fig-midmeans-log-errors.
 
-## Generalized Additive Model
+### Generalized Additive Model
 
 In addition to replicating the (primarily graphical) analysis of participant errors, we also took a more statistical approach and fitted a generalized additive model [@hastie2017generalized] that accounts for participant variation as well as the effect of comparison type, graph type, and ratio. 
 
@@ -830,7 +830,7 @@ Plots of the residual diagnostics can be found under the supplemental material i
 
 
 
-## Interactivity with 3D Rendered Charts
+### Interactivity with 3D Rendered Charts
 
 
 When 3D rendered plots were shown, we recorded the number of user interactions (clicks, rotations) with the WebGL plot. @fig-clicks shows the distribution of number of clicks over all 3D rendered trials in the experiment, as well as the number of clicks relative to the accuracy measure $\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)$. It does not appear that participants who interacted with the WebGL rendering were more accurate than their peers who did not.
@@ -851,7 +851,7 @@ res %>%
 ```
 
 
-# Discussion and Future Work
+## Discussion and Future Work
 
 Previous work in 3D graphics would suggest that the errors for the 3D graphs would be larger than the errors for the 2D graphs. 
 While we did not find any significant results indicating that 3D graphs are read less accurately, there are two possibilities that might account for this discrepancy. 
@@ -872,7 +872,7 @@ Future iterations of this experiment will likely address this estimation differe
 
 <!-- The goal of this study was to verify that previous research into graphics is upheld under a new set of circumstances. It started with a question, followed by research into prior work, and then by designing and conducting a study. This general framework of research is useful to all fields of study and is taught in most introductory statistics courses. The next step of this study is to collect more data while simultaneously providing students the opportunity to learn about the research process from both the perspectives of an experiment participant and the views of the researchers. At University of Nebraska-Lincoln, students taking introductory statistics will have the opportunity to participate in the experiment while also completing pre/post experiment surveys and reflections on a two-page abstract and a presentation of results. -->
 
-## Supplemental Material
+### Supplemental Material
 Stimuli, code, and data for this experiment are provided at [https://github.com/TWiedRW/2023-JDS-3dcharts](https://github.com/TWiedRW/2023-JDS-3dcharts).
 
 
