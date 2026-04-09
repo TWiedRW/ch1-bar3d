@@ -901,6 +901,7 @@ When 3D rendered plots were shown, we recorded the number of user interactions (
 #| layout-ncol: 2
 #| fig-show: hold
 #| fig-scap: "WebGL interaction counts versus estimation error"
+
 res %>%
   filter(plot == "3dDigital") %>%
   ggplot(aes(x = plot3dClicks)) + geom_bar() + 
