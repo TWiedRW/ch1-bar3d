@@ -1,11 +1,8 @@
 ---
-title: "CHAPTER 1"
-bibliography: JDS2023.bib
+title: "Evaluating Perceptual Judgements on 3D Printed Bar Charts"
 ---
 
 ```{r, include = F}
-knitr::opts_chunk$set(echo = F, dpi = 300, message =F, warning = F, error = F, dev = "ragg_png")
-
 library(tidyverse)
 library(RSQLite)
 library(lme4)
@@ -84,11 +81,18 @@ Each chart had two bars marked for comparison; participants were asked to determ
 We are primarily interested in the grouped bar charts (in part because 3D printing is not yet inexpensive enough to make moderate-scale stacked bar chart experiments viable), which consisted of two comparison bars which were either adjacent or in separate groups.
 These grouped bar charts will be referenced as adjacent and separated graph types in this paper, respectively.
 
-```{r fig-bar-types}
+```{r}
+#| label: fig-bar-types
 #| fig-width: 4
 #| fig-height: 4
 #| fig-cap: "@clevelandGraphical1984 used two different types of grouped bar charts: comparisons between adjacent bars, and comparisons between separated bars. It is widely acknowledged that comparisons between separated bars (Type 3 comparisons, in Cleveland \\& McGill's terminology) are more difficult and error-prone."
+#| fig-subcap:
+#| - "Type 1"
+#| - "Type 3"
+#| fig-scap: "Adjacent versus separated grouped bar comparisons"
 #| layout-ncol: 2
+#| out-width: 90%
+
 library(ggplot2)
 library(ragg)
 datasets$data[[1]] %>%
@@ -134,6 +138,7 @@ Thus, there is reason to think that perceptual accuracy may be dependent on the 
 #| fig-height: 4
 #| out-width: "33%"
 #| fig-cap: "An illustration of the sine illusion [@vanderplasSignsSineIllusion2015], also known as the line-width illusion. All vertical lines are the same length, but the lines in the middle of the curve appear to be much shorter. The illusion results when implicit perceptual corrections useful for perceiving the size of objects with depth are applied to 2D stimuli with no actual depth. As 3D heuristics occasionally cause inaccurate communication when applied to 2D objects, it is reasonable to think that there might be some situations where charts making use of a realistic third dimension might be perceived more accurately than their 2D equivalents."
+#| fig-scap: "Sine illusion and 3D depth heuristic effects"
 #| fig-subcap:
 #|    - "Sine Illusion"
 #|    - "3D surface with similar features"
@@ -433,7 +438,9 @@ In this section, we discuss the replication process and the design of our versio
 The first step of replicating the position-length experiment was to determine the heights of the bars that  participants use for comparisons.
 These values for the bar heights are linear on a log scale and are given by
 
-\[s_i=10\cdot 10^{(i-1)/12}, \qquad i=1,...,10\]
+$$
+s_i=10\cdot 10^{(i-1)/12}, \qquad i=1,...,10
+$$
 
 
 Each graph presents two bars from the values given above where the participants are asked to judge the ratio of the smaller bar to the larger bar. The ratio of bars used by Cleveland and McGill were 17.8, 26.1, 38.3, 46.4 (twice), 56.2, 68.1 (twice), and 82.5 (twice).
@@ -464,7 +471,7 @@ datasets %>%
   mutate(`Ratio (%)` = round(Smaller/Larger,3)*100) %>% arrange(`Ratio (%)`) %>% 
   pivot_longer(Smaller:`Ratio (%)`, values_to = 'Height', names_to = 'Bar') %>% 
   pivot_wider(names_from = setID, values_from = Height) %>% 
-  knitr::kable(caption = 'Values used in the experiment to make ratio comparisons, sorted by ratio. The ID label corresponds to the file reference number.') 
+  knitr::kable(caption = 'Values used in the experiment to make ratio comparisons, sorted by ratio. The ID label corresponds to the file reference number.', longtable = F, format = 'latex', booktabs = T) 
 
 ```
 
@@ -481,7 +488,18 @@ There are some graphical elements that cannot be easily portrayed via 3D printin
 <!-- The aspect ratio of the plots presented in the original paper is approximately 0.825:1. The aspect ratio of the plots presented in our study is closer to 0.864:1, but -->
 <!-- The aspect ratio of the 2d plots (including only the bars is 2:1), while the aspect ratio of the 3d printed charts is 11:9.5. This is something we probably need to fix.... Until then, let's not go there -->
 
-```{r fig-plotTypes, fig.cap = "Two dimensional, 3D digital rendering, and 3D-printed charts used in this study.",out.width = c("30%", "30%", "35%"), fig.show = "hold"}
+```{r}
+#| label: fig-plotTypes
+#| fig-cap: "Two dimensional, 3D digital rendering, and 3D-printed charts used in this study."
+#| fig-subcap:
+#| - "2D bar chart"
+#| - "3D digital bar chart"
+#| - "3D-printed bar chart"
+#| fig-show: "hold"
+#| layout-ncol: 3
+#| out-width: 70%
+#| fig-scap: "2D, 3D digital, and 3D-printed chart types"
+
 knitr::include_graphics("_images/Type1-Rep01.png", dpi = 300)
 knitr::include_graphics("_images/RenderedChart.png", dpi = 300)
 knitr::include_graphics("_images/Kit_of_charts.png", dpi = 300)
@@ -514,7 +532,10 @@ A diagram of the experimental design is provided in @fig-studyDesign. The study 
 <!-- There are 21 kits in total so that each combination of ratios is accounted for. -->
 <!-- Each graph is randomly assigned either an adjacent or separated comparison. -->
 
-```{r fig-studyDesign, fig.cap = "A graphical representation of the study design. Only five of the seven ratios were used in each kit; at least one of the smallest or largest ratios were included along with 4 other charts; each selected ratio was displayed in all 3 mediums. For each medium $\\times$ ratio combination, the comparison type (separated or adjacent) was randomly determined. A total of 21 kits of 3D printed charts were created to include all combinations of the five ratios."}
+```{r}
+#| label: fig-studyDesign
+#| fig-cap: "A graphical representation of the study design. Only five of the seven ratios were used in each kit; at least one of the smallest or largest ratios were included along with 4 other charts; each selected ratio was displayed in all 3 mediums. For each medium $\\times$ ratio combination, the comparison type (separated or adjacent) was randomly determined. A total of 21 kits of 3D printed charts were created to include all combinations of the five ratios."
+#| fig-scap: "Study design for bar chart perception experiment"
 knitr::include_graphics("_images/design.pdf")
 ```
 
@@ -530,7 +551,15 @@ A total of `r nrow(valid.users)` participants completed our study; demographics 
 
 
 
-```{r fig-demographics, fig.cap="Demographic characteristics of participants in the study.", message=FALSE, warning=FALSE, out.width='100%', fig.width = 9, fig.height = 3.5, cache = F}
+```{r}
+#| label: fig-demographics
+#| fig-cap: "Demographic characteristics of participants in the study."
+#| message: false
+#| warning: false
+#| out-width: 100%
+#| fig-width: 6.5
+#| fig-height: 3.5
+#| fig-scap: "Participant demographics"
 library(patchwork)
 valid.users$userAppStartTime <- as.POSIXct(valid.users$userAppStartTime,
            origin = '1970-1-1')
@@ -590,14 +619,22 @@ A Shiny applet was used for data collection, along with the provided kit of 3D p
 Participants provided informed consent through the applet, and then were asked for demographic information (age, gender, education level). 
 Then, participants were shown a "practice" page which allowed them to experiment with the data collection interface and practice estimating the ratio between the bars, as shown in @fig-practice. This practice interface did not provide any numeric feedback as to participant correctness, but was merely intended to familiarize the participants with the questions which would be asked as well as the process of estimating the ratio between the two bars.
 
-```{r fig-practice, fig.cap = "Screenshot of Shiny application practice screen. Three 2D bar charts with different ratios were provided, along with sliders indicating the correct proportion. Participants could practice with the sliders and preview the questions that would be asked as part of the task.", out.width = "80%"}
+```{r}
+#| label: fig-practice
+#| fig-cap: "Screenshot of Shiny application practice screen. Three 2D bar charts with different ratios were provided, along with sliders indicating the correct proportion. Participants could practice with the sliders and preview the questions that would be asked as part of the task."
+#| out.width: 80%
+#| fig-scap: "Shiny application practice screen"
 knitr::include_graphics("_images/03-Practice-2.png")
 ```
 
 After the practice screen, participants were asked to provide the kit ID. Participants were also instructed that when indicated, they should choose a 3D chart from the kit and select the ID code of the chart (inscribed on the bottom) from the drop-down menu before completing the estimation task. 
 Participants were also instructed to make quick judgements for each graph and not to measure or estimate ratios using physical objects.
 
-```{r fig-experiment3dRender, fig.cap = "Screenshot of the applet collecting data for a 3D rendered chart task. Participants were asked to select which bar (circle or triangle) was smaller, and then to estimate the ratio of the smaller bar to the larger bar.", out.width = "80%"}
+```{r}
+#| label: fig-experiment3dRender
+#| fig-cap: "Screenshot of the applet collecting data for a 3D rendered chart task. Participants were asked to select which bar (circle or triangle) was smaller, and then to estimate the ratio of the smaller bar to the larger bar."
+#| out-width: 80%
+#| fig-scap: "3D rendered chart task interface"
 knitr::include_graphics("_images/05-Experiment-05-filled-in.png")
 ```
 
@@ -610,13 +647,13 @@ This differs from @clevelandGraphical1984, but maintains the spirit of the study
 res %>%
   group_by(subject, ratio) %>%
   summarize(mean = mean(byHowMuch), sd = sd(byHowMuch))
-  
 ```
 
 
 ## Results
 
-```{r, include = F}
+```{r}
+#| include: false
 res_sub_count <- res_all %>% 
   group_by(nickname, participantUnique, appStartTime, subject) %>% 
   count()
@@ -640,7 +677,14 @@ They also added 1/8 to prevent distortions when the errors were close to zero.
 @fig-midmeans-log-errors shows the midmeans of the log absolute errors compared to the true ratio of the bars for each graph type and comparison type. 
 The results suggest that the log absolute errors increase for greater differences between the smaller and larger bars, but are consistent across the graph types. 
 
-```{r fig-midmeans-log-errors, fig.cap='Midmeans and observed values of log absolute errors for the true ratio of bars. Summary lines are computed from raw data using a loess smooth.', message=FALSE, warning=FALSE, out.width='\\textwidth', fig.height=3}
+```{r}
+#| label: fig-midmeans-log-errors
+#| fig-cap: "Midmeans and observed values of log absolute errors for the true ratio of bars. Summary lines are computed from raw data using a loess smooth."
+#| message: false
+#| warning: false
+#| out-width: \textwidth
+#| fig-height: 3
+#| fig-scap: "Midmeans of log absolute error by chart type"
 plot.types = c('2D', 'Rendered 3D', '3D Printed')
 names(plot.types) = c('2dDigital', '3dDigital', '3dPrint')
 
@@ -719,7 +763,8 @@ $$y= s^D_j(R) + s^T_k(R) + D_j + T_k + P_l + \epsilon$$
 
 - $\epsilon$ is the random error
 
-```{r gam}
+```{r}
+#| label: gam
 library(mgcv)
 library(gratia)
 res2 <- res %>%
@@ -754,7 +799,13 @@ gam_sum$s.table %>% as.data.frame() %>%
 A generalized additive model with random effects for subject was fit using the `mgcv` package [@mgcv1;@mgcv2;@mgcv3]. Spline terms by comparison type and display type were included for the ratio variable, to account for indications of nonlinearity from @fig-midmeans-log-errors; cumulative predictions for fixed effects are shown in @fig-gam-pred-chart. It is clear that there are differences between the errors for separated comparisons and adjacent comparisons; adjacent comparisons seem to have roughly similar errors for all ratio values, while separated comparisons seem to have lower errors for points near 0, .5, and 1, with higher errors as the distance increases from one of these anchor points; this effect has been explored in @hollandsBiasProportionJudgments2000. 
 Residuals from the model indicate that there is some left skew in the tails, but this is not extreme; code for this analysis can be found in the supplemental materials on GitHub.
 
-```{r fig-gam-pred-chart, fig.cap = "Predictions with standard errors for fixed effects in a generalized additive model with splines for ratio by comparison and ratio by display method. It is clear that the separated comparisons are easier to estimate when small, right around 50\\%, or large, and harder to estimate between these points. What is interesting is that no such trend is present for adjacent comparisons. ", fig.width = 7, fig.height = 3, out.width = "\\textwidth"}
+```{r}
+#| label: fig-gam-pred-chart
+#| fig-cap: "Predictions with standard errors for fixed effects in a generalized additive model with splines for ratio by comparison and ratio by display method. It is clear that the separated comparisons are easier to estimate when small, right around 50\\%, or large, and harder to estimate between these points. What is interesting is that no such trend is present for adjacent comparisons."
+#| fig-width: 6.5
+#| fig-height: 3
+#| out-width: 100%
+#| fig-scap: "GAM predictions by ratio and comparison type"
 # 
 # coef(gam_mod)
 # draw(gam_mod, ncol = 4)
@@ -784,10 +835,13 @@ newdata %>%
 
 ```
 
-```{r fig-residualplots-gam, include = F}
+```{r}
 #| fig-width: 3
+#| label: fig-residualplots-gam
 #| fig-height: 3
+#| include: false
 #| fig-cap: "Residual diagnostic plots for the linear mixed model."
+#| fig-scap: "GAM residual diagnostics"
 #| fig-subcap:
 #| - Fitted vs. predicted residuals
 #| - Q-Q plot
@@ -835,7 +889,18 @@ Plots of the residual diagnostics can be found under the supplemental material i
 
 When 3D rendered plots were shown, we recorded the number of user interactions (clicks, rotations) with the WebGL plot. @fig-clicks shows the distribution of number of clicks over all 3D rendered trials in the experiment, as well as the number of clicks relative to the accuracy measure $\log_2(|\text{Judged Percent} - \text{True Percent}|+1/8)$. It does not appear that participants who interacted with the WebGL rendering were more accurate than their peers who did not.
 
-```{r fig-clicks, fig.cap = "Participant clicks on the WebGL interface (left) in order to interact with the plot. Most participants did not interact with the WebGL interface, perhaps because they did not realize that interacting was an option, but some participants utilized the interactivity heavily. (Right) Participant interactivity was not associated with increased accuracy.", fig.width = 4, fig.height = 4, out.width = ".45\\textwidth", fig.show = "hold"}
+```{r}
+#| label: fig-clicks
+#| fig-cap: "Participant clicks on the WebGL interface (left) in order to interact with the plot. Most participants did not interact with the WebGL interface, perhaps because they did not realize that interacting was an option, but some participants utilized the interactivity heavily. (Right) Participant interactivity was not associated with increased accuracy."
+#| fig-subcap:
+#| - "Histogram of clicks"
+#| - "Clicks vs. log error"
+#| fig-width: 4
+#| fig-height: 4
+#| out-width: 90%
+#| layout-ncol: 2
+#| fig-show: hold
+#| fig-scap: "WebGL interaction counts versus estimation error"
 res %>%
   filter(plot == "3dDigital") %>%
   ggplot(aes(x = plot3dClicks)) + geom_bar() + 
@@ -873,6 +938,7 @@ Future iterations of this experiment will likely address this estimation differe
 <!-- The goal of this study was to verify that previous research into graphics is upheld under a new set of circumstances. It started with a question, followed by research into prior work, and then by designing and conducting a study. This general framework of research is useful to all fields of study and is taught in most introductory statistics courses. The next step of this study is to collect more data while simultaneously providing students the opportunity to learn about the research process from both the perspectives of an experiment participant and the views of the researchers. At University of Nebraska-Lincoln, students taking introductory statistics will have the opportunity to participate in the experiment while also completing pre/post experiment surveys and reflections on a two-page abstract and a presentation of results. -->
 
 ### Supplemental Material
+
 Stimuli, code, and data for this experiment are provided at [https://github.com/TWiedRW/2023-JDS-3dcharts](https://github.com/TWiedRW/2023-JDS-3dcharts).
 
 
@@ -898,6 +964,7 @@ knitr::kable(apa_lm$table, caption = "Analysis of Fixed Effects")
 #| fig-width: 3
 #| fig-height: 3
 #| fig-cap: "Residual diagnostic plots for the linear mixed model."
+#| fig-scap: "LMM residual diagnostics"
 #| fig-subcap:
 #| - Fitted vs. predicted residuals
 #| - Q-Q plot
@@ -1014,5 +1081,10 @@ ggplot(mapping = aes(sample = r2)) +
 ```
 
 
+```{r}
+#| include: false
+#| eval: false
+knitr::purl(input = 'index.qmd', output = 'ch1-code.R')
+```
 
 

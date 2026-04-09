@@ -1,0 +1,148 @@
+---
+title: "Chapter 1 Appendix"
+---
+
+
+
+```{r}
+#| include: false
+source('ch1-code.R')
+```
+
+```{r, include=F, eval = F}
+library(papaja)
+library(lme4)
+
+mod <- lmer(response ~ (1|subject) + ratioLabel + plot + type,
+            data = res)
+
+modsum <- summary(mod)
+modaov <- anova(mod)
+modaovsum <- summary(modaov)
+
+f_df <- as.numeric(length(modsum$residuals)-modsum$ngrps - 1)
+
+apa_lm <- apa_print(mod)
+knitr::kable(apa_lm$table, caption = "Analysis of Fixed Effects")
+```
+
+
+```{r fig-residualplots, include = F, eval = F}
+#| fig-width: 3
+#| fig-height: 3
+#| fig-cap: "Residual diagnostic plots for the linear mixed model."
+#| fig-scap: "LMM residual diagnostics"
+#| fig-subcap:
+#| - Fitted vs. predicted residuals
+#| - Q-Q plot
+#| out-width: ".40\\linewidth"
+#| fig-show: "hold"
+#| layout-ncol: 2
+
+r = residuals(mod)
+p = predict(mod)
+
+ggplot(mapping = aes(x = p, y = r)) +
+  geom_point() + 
+  geom_hline(yintercept = 0, linetype = 'dashed', color = 'red') + 
+  theme_bw() + 
+  labs(x = 'Fitted value',
+       y = 'Residual')
+
+ggplot(mapping = aes(sample = r)) + 
+  geom_qq() + 
+  geom_qq_line(color = 'red', linetype = 'dashed') + 
+  theme_bw() + 
+  labs(x = 'Theoretical Quantiles',
+       y = 'Sample Quantiles')
+
+```
+
+
+```{r fig-percent-error-model, eval = F}
+# Model using % error instead of the log2 error...
+
+res3 <- res2 %>%
+  mutate(estimation_error = (byHowMuch - ratioLabel)/(ratioLabel))
+res3 %>% 
+  mutate(type = "Raw Data") %>%
+  ggplot(mapping = aes(x = Height*100, y = estimation_error,
+                       color = graphtype, fill = graphtype)) +
+  geom_smooth(se = T, alpha=.125,  expand = F, method = "loess") +
+  geom_point(aes(shape = type, alpha = type, size = type)) +
+  scale_shape_manual("Data", values = c(19, 1)) + 
+  scale_size_manual("Data", values = c(2, 1)) + 
+  scale_alpha_manual("Data", values = c(1, .25)) + 
+  scale_fill_discrete(labels = c('Adjacent', 'Separated')) +
+  scale_color_discrete(labels = c('Adjacent', 'Separated')) +
+  scale_x_continuous(limits = c(0, 100)) + 
+  facet_wrap(~plot, labeller = labeller(plot = plot.types)) +
+  labs(title = '',
+       x = 'True Proportional Difference (%)',
+       y = 'Log Error',fill = 'Comparison Type',
+       color = 'Comparison Type') +
+  theme_bw() +
+  theme(legend.position = 'bottom')
+gam_mod2 <- gam(estimation_error ~ 
+                 s(ratio_prop, by = plot, k = 6) +
+                 s(ratio_prop, by = type, k = 6) + 
+                 plot + type + 
+                 s(participant, bs = "re"),
+               data = res3, method = 'REML')
+# gam_mod
+
+gam_sum2 <- summary(gam_mod2)
+
+
+gam_sum2$p.table %>% knitr::kable(digits = 4, caption = "Parametric coefficients in gam model.", label = "gam-param", booktabs = T)
+
+gam_sum2$s.table %>% as.data.frame() %>% 
+  mutate(Smooth = rownames(.),
+         Smooth = str_replace(Smooth, "ratio_prop", "Ratio")) %>%
+  select(Smooth, everything()) %>%
+  knitr::kable(digits = 4, row.names = F, caption = "Approximate significance of smooth terms in gam model.", label = "gam-smooth", booktabs = T)
+
+
+
+newdata <- expand.grid(
+  ratio_prop = seq(0.15, .85, .001), 
+  type = c("Separated", "Adjacent"), 
+  plot = unique(res3$plot), 
+  participant = 1)
+pred2 <- predict(gam_mod2, newdata = newdata, type = "terms", se.fit = T) %>% as.data.frame() 
+
+pred_se2 <- select(pred2, matches("se.fit")) %>%
+  select(-matches("participant"))
+pred_fit2 <- select(pred2, matches("^fit.")) %>%
+  select(-matches("participant"))
+
+newdata %>%
+  mutate(pred = rowSums(pred_fit2) + gam_mod2$coefficients[1], 
+         se = rowSums(pred_se2) + gam_sum2$p.table[1,2]) %>%
+  ggplot(aes(x = ratio_prop, y = pred , color = type)) + 
+  geom_ribbon(aes(ymin = pred - 1.96*se, ymax = pred + 1.96*se, fill = type), alpha = .25) +  
+  geom_line() + facet_grid(.~plot) + 
+  scale_color_discrete("Comparison", na.translate = F) + scale_fill_discrete("Comparison", na.translate = F) + 
+  
+  geom_point(data = res3, aes(x = ratioLabel/100, y = estimation_error, color = type)) +
+  theme_bw() + ylab("Estimation Error") + xlab("True Proportion Difference") + 
+  xlim(c(0, 1))
+
+
+r2 = residuals(gam_mod2)
+p2 = predict(gam_mod2)
+
+ggplot(mapping = aes(x = p2, y = r2)) +
+  geom_point() + 
+  geom_hline(yintercept = 0, linetype = 'dashed', color = 'red') + 
+  theme_bw() + 
+  labs(x = 'Fitted value',
+       y = 'Residual')
+
+ggplot(mapping = aes(sample = r2)) + 
+  geom_qq() + 
+  geom_qq_line(color = 'red', linetype = 'dashed') + 
+  theme_bw() + 
+  labs(x = 'Theoretical Quantiles',
+       y = 'Sample Quantiles')
+```
