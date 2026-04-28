@@ -85,10 +85,10 @@ These grouped bar charts will be referenced as adjacent and separated graph type
 #| label: fig-bar-types
 #| fig-width: 4
 #| fig-height: 4
-#| fig-cap: "@clevelandGraphical1984 used two different types of grouped bar charts: comparisons between adjacent bars, and comparisons between separated bars. It is widely acknowledged that comparisons between separated bars (Type 3 comparisons, in Cleveland \\& McGill's terminology) are more difficult and error-prone."
+#| fig-cap: "Grouped bar charts used by @clevelandGraphical1984."
 #| fig-subcap:
-#| - "Type 1"
-#| - "Type 3"
+#| - "Type 1 (Adjacent)"
+#| - "Type 3 (Separated)"
 #| fig-scap: "Adjacent versus separated grouped bar comparisons"
 #| layout-ncol: 2
 #| out-width: 90%
@@ -137,7 +137,7 @@ Thus, there is reason to think that perceptual accuracy may be dependent on the 
 #| fig-width: 4
 #| fig-height: 4
 #| out-width: "33%"
-#| fig-cap: "An illustration of the sine illusion [@vanderplasSignsSineIllusion2015], also known as the line-width illusion. All vertical lines are the same length, but the lines in the middle of the curve appear to be much shorter. The illusion results when implicit perceptual corrections useful for perceiving the size of objects with depth are applied to 2D stimuli with no actual depth. As 3D heuristics occasionally cause inaccurate communication when applied to 2D objects, it is reasonable to think that there might be some situations where charts making use of a realistic third dimension might be perceived more accurately than their 2D equivalents."
+#| fig-cap: "Illustration of the sine illusion."
 #| fig-scap: "Sine illusion and 3D depth heuristic effects"
 #| fig-subcap:
 #|    - "Sine Illusion"
@@ -471,7 +471,7 @@ datasets %>%
   mutate(`Ratio (%)` = round(Smaller/Larger,3)*100) %>% arrange(`Ratio (%)`) %>% 
   pivot_longer(Smaller:`Ratio (%)`, values_to = 'Height', names_to = 'Bar') %>% 
   pivot_wider(names_from = setID, values_from = Height) %>% 
-  knitr::kable(caption = 'Values used in the experiment to make ratio comparisons, sorted by ratio. The ID label corresponds to the file reference number.', longtable = F, format = 'latex', booktabs = T) 
+  knitr::kable(caption = 'Values used in the experiment to make ratio comparisons, sorted by ratio.', longtable = F, format = 'latex', booktabs = T) 
 
 ```
 
@@ -891,7 +891,7 @@ When 3D rendered plots were shown, we recorded the number of user interactions (
 
 ```{r}
 #| label: fig-clicks
-#| fig-cap: "Participant clicks on the WebGL interface (left) in order to interact with the plot. Most participants did not interact with the WebGL interface, perhaps because they did not realize that interacting was an option, but some participants utilized the interactivity heavily. (Right) Participant interactivity was not associated with increased accuracy."
+#| fig-cap: "Participant interactions with the WebGL rendered charts."
 #| fig-subcap:
 #| - "Histogram of clicks"
 #| - "Clicks vs. log error"
